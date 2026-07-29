@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pitch · SumoBot Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sky: #7ec8ff;
+      --grass: #3cb371;
+      --ink: #1c2a24;
+      --panel: #fff8e8;
+      --teal: #1a8f6e;
+      --accent: #ff8a3d;
+      --gold: #ffd23f;
+      --display: "Press Start 2P", monospace;
+      --body: "Nunito", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; font-family: var(--body); color: var(--ink); background: #0f1f1a; }
+    .deck { height: 100%; overflow: hidden; position: relative; }
+    .slide {
+      display: none; height: 100%; padding: clamp(16px, 3vw, 40px);
+      flex-direction: column; justify-content: center;
+      background:
+        radial-gradient(ellipse 70% 40% at 50% 0%, #b8e4ff 0%, transparent 55%),
+        linear-gradient(180deg, var(--sky) 0%, #a8dcff 42%, var(--grass) 42%, #2a8f58 100%);
+      animation: in 0.35s ease;
+    }
+    .slide.active { display: flex; }
+    @keyframes in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .kicker {
+      font-family: var(--display); font-size: clamp(8px, 1.4vw, 11px);
+      color: var(--teal); margin: 0 0 12px; line-height: 1.6;
+    }
+    h1 {
+      font-family: var(--display); font-size: clamp(18px, 4vw, 34px);
+      margin: 0 0 14px; line-height: 1.45; max-width: 18ch;
+    }
+    h2 {
+      font-family: var(--display); font-size: clamp(14px, 2.6vw, 22px);
+      margin: 0 0 16px; line-height: 1.5;
+    }
+    .lead { font-size: clamp(1rem, 2.2vw, 1.35rem); font-weight: 800; max-width: 42rem; margin: 0 0 18px; line-height: 1.45; }
+    .muted { opacity: 0.85; font-weight: 700; }
+
+    .card {
+      background: var(--panel); border: 3px solid var(--ink); border-radius: 16px;
+      box-shadow: 0 6px 0 rgba(28,42,36,.25); padding: clamp(14px, 2vw, 22px);
+      max-width: 980px; width: 100%;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; align-items: stretch; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    @media (max-width: 800px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      h1 { max-width: none; }
+    }
+
+    .pill {
+      display: inline-block; background: var(--gold); border: 3px solid var(--ink);
+      padding: 6px 10px; font-family: var(--display); font-size: 9px; margin-bottom: 10px;
+    }
+    .bullets { margin: 0; padding-left: 1.1rem; font-weight: 700; line-height: 1.5; }
+    .bullets li { margin-bottom: 8px; }
+    .chip {
+      background: #fff; border: 2px solid var(--ink); border-radius: 999px;
+      padding: 8px 12px; font-weight: 800; font-size: 0.9rem; text-align: center;
+    }
+    .mini {
+      background: #fff; border: 3px solid var(--ink); border-radius: 12px; padding: 12px;
+      font-weight: 700; height: 100%;
+    }
+    .mini b { display: block; font-family: var(--display); font-size: 9px; margin-bottom: 8px; line-height: 1.5; color: var(--teal); }
+    .big-num {
+      font-family: var(--display); font-size: clamp(28px, 6vw, 48px); color: var(--accent); margin: 0 0 8px;
+    }
+
+    /* Fake UI captures */
+    .ui {
+      background: linear-gradient(180deg, #9fd4ff 0 45%, #5bb87a 45%);
+      border: 3px solid var(--ink); border-radius: 14px; padding: 10px; min-height: 220px;
+      position: relative; overflow: hidden;
+    }
+    .ui-panel {
+      background: var(--panel); border: 3px solid var(--ink); border-radius: 12px;
+      padding: 12px; margin: 8px auto; max-width: 280px; text-align: center;
+      box-shadow: 0 4px 0 rgba(0,0,0,.15);
+    }
+    .ui-panel .flash { font-family: var(--display); font-size: 9px; color: var(--accent); line-height: 1.5; }
+    .ui-panel .piece {
+      width: 64px; height: 64px; margin: 8px auto; background: var(--gold);
+      border: 3px solid var(--ink); border-radius: 12px; display: grid; place-items: center; font-size: 28px;
+    }
+    .block {
+      background: #d8f5e8; border: 2px solid var(--ink); border-radius: 8px;
+      padding: 7px 8px; margin: 5px 0; font-size: 0.72rem; font-weight: 800; text-align: left;
+      display: flex; justify-content: space-between; gap: 6px;
+    }
+    .block.bad { background: #ffe0e0; }
+    .slot-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-width: 200px; margin: 10px auto;
+      background: rgba(255,255,255,.35); border: 2px solid var(--ink); border-radius: 10px; padding: 8px;
+    }
+    .slot {
+      aspect-ratio: 1; background: var(--gold); border: 2px solid var(--ink);
+      border-radius: 8px; display: grid; place-items: center; font-size: 16px;
+    }
+    .nav-hint {
+      position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+      background: rgba(255,248,232,.95); border: 3px solid var(--ink); border-radius: 999px;
+      padding: 8px 14px; font-weight: 800; font-size: 0.85rem; z-index: 20;
+      display: flex; gap: 10px; align-items: center; box-shadow: 0 4px 0 rgba(0,0,0,.2);
+    }
+    .nav-hint button {
+      border: 2px solid var(--ink); background: var(--teal); color: #fff;
+      border-radius: 8px; font-weight: 900; cursor: pointer; padding: 4px 10px;
+    }
+    .progress {
+      position: fixed; top: 0; left: 0; height: 5px; background: var(--accent); z-index: 30;
+      transition: width .25s ease;
+    }
+    .logo-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+    .logo-sumo { font-family: var(--display); color: var(--accent); font-size: clamp(20px, 4vw, 32px); }
+    .logo-bot { font-family: var(--display); color: var(--teal); font-size: clamp(20px, 4vw, 32px); }
+    a.link {
+      color: var(--teal); font-weight: 900; word-break: break-all;
+    }
+    .footer-slide { margin-top: 14px; font-size: 0.9rem; font-weight: 700; opacity: .85; }
+    .flow {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 800;
+    }
+    .flow span {
+      background: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 8px 10px; font-size: 0.85rem;
+    }
+    .flow i { font-style: normal; opacity: .5; }
+    .ai-box {
+      background: #fff3c4; border: 3px dashed var(--ink); border-radius: 12px; padding: 12px; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="deck" id="deck">
+
+    <!-- 0 PORTADA -->
+    <section class="slide active">
+      <div class="card" style="max-width:720px;margin:0 auto;text-align:center">
+        <p class="kicker">Pitch · Metodologías activas + IA · STEAM en línea</p>
+        <div class="logo-row" style="justify-content:center">
+          <span class="logo-sumo">SUMO</span><span class="logo-bot">BOT</span>
+        </div>
+        <div class="pill">ACADEMY</div>
+        <p class="lead" style="margin-inline:auto">Curso-videojuego web para enseñar robótica SumoBot con <b>Aprendizaje Basado en Retos</b>.</p>
+        <p class="muted">9–13 años · rural / en línea · celular y PC</p>
+        <p class="footer-slide">Demo: <a class="link" href="index.html" target="_blank">abrir el curso</a> · Repo: <a class="link" href="https://github.com/JARV2332/Sumobot" target="_blank">JARV2332/Sumobot</a></p>
+      </div>
+    </section>
+
+    <!-- 1 PROBLEMA -->
+    <section class="slide">
+      <p class="kicker">1 / 4 · El problema</p>
+      <div class="grid-2">
+        <div class="card">
+          <h2>¿Qué situación resolvemos?</h2>
+          <p class="lead">Enseñanza de robótica STEAM (SumoBot) que suele ser difícil, fragmentada y poco motivante —sobre todo en contextos rurales o a distancia.</p>
+          <ul class="bullets">
+            <li>Los contenidos (Arduino, código, 3D, impresión) se ven sueltos, no como un proyecto.</li>
+            <li>Poca práctica guiada paso a paso y baja retención en cursos solo de texto o video.</li>
+            <li>En zona rural: acceso irregular a internet, dispositivos móviles y pocos talleres físicos.</li>
+            <li>Falta de conexión clara con la <b>rúbrica real</b> (innovación, automatización, demo, pitch).</li>
+          </ul>
+        </div>
+        <div class="ui">
+          <div class="ui-panel" style="max-width:100%;margin-top:24px">
+            <div class="flash">ANTES</div>
+            <p style="font-weight:800;margin:8px 0">PDF + teoría + “arma el robot”</p>
+            <p class="muted" style="font-size:.9rem">Sin mapa · sin piezas · sin feedback · sin juego</p>
+            <hr style="border:0;border-top:2px dashed #1c2a24;margin:12px 0">
+            <div class="flash" style="color:var(--teal)">NECESIDAD</div>
+            <p style="font-weight:800">Un curso que se sienta como misión y prepare el proyecto real.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 SOLUCION -->
+    <section class="slide">
+      <p class="kicker">2 / 4 · La solución</p>
+      <div class="card" style="margin-bottom:14px">
+        <h2>Metodología activa: ABR + Gamificación</h2>
+        <p class="lead" style="margin-bottom:10px">Aplicamos <b>Aprendizaje Basado en Retos</b>: cada mundo es un desafío. Completas lecciones → pasas el reto → ganas una pieza → armas el SumoBot.</p>
+        <div class="flow">
+          <span>💡 Ideas</span><i>→</i>
+          <span>🔌 Arduino / Wemos</span><i>→</i>
+          <span>🧩 Bloques / Código</span><i>→</i>
+          <span>📐 3D + Impresión</span><i>→</i>
+          <span>🛠️ Taller + Arena</span>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="ui">
+          <div class="ui-panel">
+            <div class="flash">Reto: ordena el ciclo</div>
+            <div class="block">1. Idear ✓ Bien</div>
+            <div class="block">2. Diseñar ✓ Bien</div>
+            <div class="block">3. Construir ✓ Bien</div>
+            <div class="block">4. Programar ✓ Bien</div>
+            <div class="block">5. Probar ✓ Bien</div>
+            <p style="font-size:.75rem;font-weight:800;color:var(--teal);margin:8px 0 0">¡Orden perfecto!</p>
+          </div>
+        </div>
+        <div class="ui">
+          <div class="ui-panel">
+            <div class="flash">¡RETO SUPERADO!</div>
+            <div class="piece">🗺️</div>
+            <b>Plan de misión</b>
+            <div style="margin-top:6px">⭐⭐⭐</div>
+          </div>
+        </div>
+        <div class="ui">
+          <div class="ui-panel">
+            <div class="flash" style="color:var(--teal)">Taller de armado</div>
+            <div class="slot-grid">
+              <div class="slot">🗺️</div><div class="slot">🧠</div><div class="slot">📡</div>
+              <div class="slot">🧩</div><div class="slot">💻</div><div class="slot">📐</div>
+              <div class="slot" style="grid-column:2">🖨️</div>
+            </div>
+            <p style="font-size:.75rem;font-weight:800">Piezas → robot completo</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2b COMO APLICA -->
+    <section class="slide">
+      <p class="kicker">2b · Cómo se ve en el curso</p>
+      <h2>De la teoría al hacer</h2>
+      <div class="grid-4" style="margin-top:8px">
+        <div class="mini"><b>Lecciones</b>Diagramas y datos de cada herramienta: qué es, dónde va, cómo se usa (Arduino, Wemos, Tinkercad, Cura/Orca, impresora…).</div>
+        <div class="mini"><b>Retos</b>Arrastrar, quiz y emparejar con pistas (verde/rojo) para mejorar sin frustrarse.</div>
+        <div class="mini"><b>Progresión</b>Mapa de mundos, avatar, estrellas e inventario de piezas del SumoBot.</div>
+        <div class="mini"><b>Evaluación</b>Rúbrica integrada + guía de pitch 3 min (innovación, automatización, demo…).</div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <p class="lead" style="margin:0">La web es el contenedor. El <b>curso</b> es el aprendizaje: misiones STEAM listas para aula presencial o en línea.</p>
+      </div>
+    </section>
+
+    <!-- 3 IA -->
+    <section class="slide">
+      <p class="kicker">3 / 4 · El toque de IA</p>
+      <div class="grid-2">
+        <div class="card">
+          <h2>¿Qué rol juega la IA?</h2>
+          <p class="lead">La IA fue <b>co-piloto pedagógico y de producción</b>: ayudó a diseñar, escribir y construir la propuesta educativa gamificada.</p>
+          <ul class="bullets">
+            <li><b>Diseño del curso:</b> convertir el temario (electrónica, programación, 3D, impresión) en mundos y retos ABR.</li>
+            <li><b>Contenido:</b> lecciones, diagramas, pistas de feedback y alineación con la rúbrica del proyecto.</li>
+            <li><b>Construcción:</b> prototipo web responsive/PWA publicable (GitHub) para uso en línea.</li>
+            <li><b>Próximo nivel (escalable):</b> quizzes automáticos, pistas personalizadas por error, y narrativas generadas para cada equipo.</li>
+          </ul>
+          <div class="ai-box" style="margin-top:12px">IA no reemplaza al docente: acelera crear un curso vivo, jugable y listo para STEAM a distancia.</div>
+        </div>
+        <div class="card">
+          <p class="big-num">IA</p>
+          <p class="lead">Como mentor de diseño</p>
+          <div class="chip" style="margin-bottom:8px">Chat / agent → guion de mundos</div>
+          <div class="chip" style="margin-bottom:8px">IA → lecciones + retos + rúbrica</div>
+          <div class="chip" style="margin-bottom:8px">IA → código web del curso-juego</div>
+          <div class="chip">Docente → facilita, evalúa y acompaña</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 IMPACTO -->
+    <section class="slide">
+      <p class="kicker">4 / 4 · El impacto</p>
+      <div class="card" style="margin-bottom:14px">
+        <h2>¿Por qué transforma el aula?</h2>
+        <p class="lead">Porque cambia “ver teoría” por <b>completar misiones</b>, con un robot que se va armando y una rúbrica visible desde el día uno.</p>
+      </div>
+      <div class="grid-3">
+        <div class="mini"><b>Motivación</b>Formato videojuego 80s: avatar, estrellas, piezas y arena. Ideal para 9–13 años.</div>
+        <div class="mini"><b>STEAM integral</b>Une electrónica, programación, diseño 3D e impresión en un solo proyecto SumoBot.</div>
+        <div class="mini"><b>En línea / rural</b>Web responsive + PWA: celular o PC, publicable, usable con poca fricción.</div>
+        <div class="mini"><b>Evaluación clara</b>La rúbrica (automatización, demo, pitch…) está dentro del curso, no en un PDF aparte.</div>
+        <div class="mini"><b>Trabajo en equipo</b>Roles, lluvia de ideas y ciclo de vida: habilidades sociales + técnicas.</div>
+        <div class="mini"><b>Escalable</b>Sirve a un taller local o a un programa STEAM a distancia para muchas escuelas.</div>
+      </div>
+    </section>
+
+    <!-- CIERRE -->
+    <section class="slide">
+      <div class="card" style="max-width:780px;margin:0 auto;text-align:center">
+        <p class="kicker">Cierre · 3 minutos</p>
+        <h1 style="max-width:none;margin-inline:auto">SumoBot Academy</h1>
+        <p class="lead" style="margin-inline:auto">Problema: robótica difícil de enseñar a distancia.<br/>Solución: curso ABR gamificado.<br/>IA: co-piloto para diseñar y construir.<br/>Impacto: aula STEAM motivada, medible y en línea.</p>
+        <div class="grid-2" style="text-align:left;margin-top:12px">
+          <div class="mini"><b>Demo en vivo</b><a class="link" href="index.html" target="_blank">Abrir SumoBot Academy</a></div>
+          <div class="mini"><b>Código</b><a class="link" href="https://github.com/JARV2332/Sumobot" target="_blank">github.com/JARV2332/Sumobot</a></div>
+        </div>
+        <p class="footer-slide">← → o clic para navegar · F para pantalla completa</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="nav-hint">
+    <button type="button" id="prev">←</button>
+    <span id="counter">1 / 7</span>
+    <button type="button" id="next">→</button>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    let i = 0;
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+      document.getElementById("counter").textContent = `${i + 1} / ${slides.length}`;
+      document.getElementById("progress").style.width = `${((i + 1) / slides.length) * 100}%`;
+    }
+    document.getElementById("prev").onclick = () => show(i - 1);
+    document.getElementById("next").onclick = () => show(i + 1);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); show(i - 1); }
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+    });
+    document.querySelector(".deck").addEventListener("click", (e) => {
+      if (e.target.closest("a,button,.nav-hint")) return;
+      const mid = window.innerWidth / 2;
+      show(e.clientX > mid ? i + 1 : i - 1);
+    });
+    show(0);
+  </script>
+</body>
+</html>

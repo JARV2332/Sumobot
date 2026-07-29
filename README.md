@@ -12,6 +12,13 @@ Pensado para niños y niñas de 9–13 años, responsive (celular y PC), publica
 npx --yes serve .
 ```
 
+## Pitch / exposición
+
+Abre `slides.html` para la presentación (problema, solución ABR, IA e impacto).
+
+- Flechas ← → o clic · `F` pantalla completa
+- Enlace a la demo del curso y al repo
+
 ## Publicar
 
 Sube toda la carpeta a:
@@ -21,6 +28,8 @@ Sube toda la carpeta a:
 - Cualquier hosting de archivos estáticos
 
 No necesita backend ni base de datos. El progreso se guarda en el navegador (`localStorage`).
+
+Repo: https://github.com/JARV2332/Sumobot
 
 ## Mundos incluidos
 
