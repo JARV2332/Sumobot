@@ -141,6 +141,21 @@
     .ai-box {
       background: #fff3c4; border: 3px dashed var(--ink); border-radius: 12px; padding: 12px; font-weight: 700;
     }
+    .slide-qr {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 16px; margin: 18px auto 8px; padding: 14px;
+      background: #fff; border: 3px solid var(--ink); border-radius: 14px;
+      max-width: 440px; text-align: left;
+    }
+    .slide-qr img {
+      width: 160px; height: 160px; border: 3px solid var(--ink);
+      border-radius: 10px; background: #fff; flex-shrink: 0;
+    }
+    .slide-qr-text { min-width: 160px; flex: 1; }
+    .qr-scan {
+      font-family: var(--display); font-size: 10px; line-height: 1.5;
+      margin: 0 0 8px; color: var(--teal);
+    }
   </style>
 </head>
 <body>
@@ -149,7 +164,7 @@
 
     <!-- 0 PORTADA -->
     <section class="slide active">
-      <div class="card" style="max-width:720px;margin:0 auto;text-align:center">
+      <div class="card" style="max-width:780px;margin:0 auto;text-align:center">
         <p class="kicker">Pitch · Metodologías activas + IA · STEAM en línea</p>
         <div class="logo-row" style="justify-content:center">
           <span class="logo-sumo">SUMO</span><span class="logo-bot">BOT</span>
@@ -157,6 +172,23 @@
         <div class="pill">ACADEMY</div>
         <p class="lead" style="margin-inline:auto">Curso-videojuego web para enseñar robótica SumoBot con <b>Aprendizaje Basado en Retos</b>.</p>
         <p class="muted">9–13 años · rural / en línea · celular y PC</p>
+
+        <div class="slide-qr">
+          <a href="https://sumobot-five.vercel.app/" target="_blank" rel="noopener noreferrer">
+            <img
+              src="assets/qr-sumobot.png"
+              width="180"
+              height="180"
+              alt="QR para entrar a SumoBot Academy"
+            />
+          </a>
+          <div class="slide-qr-text">
+            <p class="qr-scan">Escanea para ingresar</p>
+            <p class="muted" style="margin:0 0 8px">Abre el curso en tu celular ahora</p>
+            <a class="link" href="https://sumobot-five.vercel.app/" target="_blank" rel="noopener noreferrer">sumobot-five.vercel.app</a>
+          </div>
+        </div>
+
         <p class="footer-slide">Demo: <a class="link" href="index.html" target="_blank">abrir el curso</a> · Repo: <a class="link" href="https://github.com/JARV2332/Sumobot" target="_blank">JARV2332/Sumobot</a></p>
       </div>
     </section>
