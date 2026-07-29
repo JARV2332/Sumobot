@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a8f6e" />
+  <meta name="description" content="SumoBot Academy — Aprendizaje por retos para armar tu propio robot sumo." />
+  <title>SumoBot Academy — Aprendizaje por Retos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231a8f6e'/%3E%3Crect x='12' y='20' width='40' height='24' rx='4' fill='%23ffe566'/%3E%3Ccircle cx='22' cy='32' r='4' fill='%231a1a1a'/%3E%3Ccircle cx='42' cy='32' r='4' fill='%231a1a1a'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="app">
+    <!-- HOME -->
+    <section id="screen-title" class="screen active screen-home">
+      <div class="sky-layer" aria-hidden="true"></div>
+      <div class="home-wrap">
+        <header class="home-hero">
+          <p class="eyebrow">Curso · Aprendizaje basado en retos (ABR)</p>
+          <h1 class="logo-title">
+            <span class="logo-sumo">SUMO</span><span class="logo-bot">BOT</span>
+            <span class="logo-sub">ACADEMY</span>
+          </h1>
+          <p class="tagline">No es solo un juego: es el curso para armar tu SumoBot paso a paso.</p>
+          <div class="title-robot" aria-hidden="true">
+            <div class="pixel-bot">
+              <div class="bot-body"></div>
+              <div class="bot-eye left"></div>
+              <div class="bot-eye right"></div>
+              <div class="bot-wheel left"></div>
+              <div class="bot-wheel right"></div>
+              <div class="bot-bumper"></div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btn-start">▶ Empezar el curso</button>
+            <button class="btn btn-ghost" id="btn-continue" hidden>Continuar partida</button>
+          </div>
+        </header>
+
+        <article class="home-card">
+          <h2>¿Por qué existe esta web?</h2>
+          <p>
+            En muchas escuelas rurales hay ganas de inventar, pero el camino para armar un robot
+            se siente difícil. Esta página convierte el <b>curso</b> en un <b>mundo de retos</b>:
+            aprendes electrónica, programación, diseño e impresión 3D mientras avanzas como en un videojuego.
+          </p>
+          <p class="home-note">
+            La web es el contenedor. El aprendizaje real son las lecciones, los retos y el armado del SumoBot.
+          </p>
+        </article>
+
+        <article class="home-card">
+          <h2>¿Cómo funciona el curso?</h2>
+          <div class="home-steps">
+            <div class="home-step"><span>1</span><p>Entras a un <b>mundo</b> (ideas, Arduino, bloques…)</p></div>
+            <div class="home-step"><span>2</span><p>Ves la <b>lección</b> con imagen y datos de la herramienta</p></div>
+            <div class="home-step"><span>3</span><p>Superás el <b>reto</b> y ganas una pieza del robot</p></div>
+            <div class="home-step"><span>4</span><p>En el <b>taller</b> armas el SumoBot y practicas el pitch</p></div>
+          </div>
+        </article>
+
+        <article class="home-card">
+          <h2>Qué vas a aprender</h2>
+          <div class="home-skills">
+            <div class="skill-chip">💡 Ideas y ciclo de vida</div>
+            <div class="skill-chip">🔌 Arduino</div>
+            <div class="skill-chip">📡 Wemos</div>
+            <div class="skill-chip">🧩 Bloques</div>
+            <div class="skill-chip">💻 Código</div>
+            <div class="skill-chip">📐 Tinkercad</div>
+            <div class="skill-chip">🥪 Cura / Orca</div>
+            <div class="skill-chip">🖨️ Impresión 3D</div>
+          </div>
+          <p class="hint" style="margin:14px 0 0">Para 9 a 13 años · celular y computadora · listo para publicar</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- AVATAR -->
+    <section id="screen-avatar" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="title" aria-label="Volver">←</button>
+        <h2>Crea tu inventor/a</h2>
+        <span class="spacer"></span>
+      </header>
+      <div class="panel">
+        <div class="avatar-preview" id="avatar-preview"></div>
+        <label class="field">
+          <span>Tu nombre de inventor/a</span>
+          <input id="avatar-name" maxlength="16" placeholder="Ej. Luna" autocomplete="nickname" />
+        </label>
+        <p class="field-label">Elige tu color</p>
+        <div class="swatches" id="avatar-swatches"></div>
+        <button class="btn btn-primary btn-block" id="btn-save-avatar">Entrar al mapa →</button>
+      </div>
+    </section>
+
+    <!-- WORLD MAP -->
+    <section id="screen-map" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="title" title="Inicio" aria-label="Inicio">🏠</button>
+        <div class="player-chip">
+          <span class="chip-avatar" id="map-avatar"></span>
+          <span id="map-player-name">—</span>
+        </div>
+        <div class="stat-pills">
+          <span class="pill" title="Piezas">🧩 <b id="stat-parts">0</b>/7</span>
+          <span class="pill" title="Estrellas">⭐ <b id="stat-stars">0</b></span>
+        </div>
+        <button class="btn-icon" id="btn-workshop" title="Taller">🛠️</button>
+      </header>
+      <div class="map-scroll">
+        <div class="world-map" id="world-map"></div>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn active" data-go="map">🗺️ Mapa</button>
+        <button class="nav-btn" data-go="workshop">🛠️ Taller</button>
+        <button class="nav-btn" data-go="rubric">📋 Rúbrica</button>
+      </nav>
+    </section>
+
+    <!-- WORLD HUB -->
+    <section id="screen-world" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="map" aria-label="Mapa">←</button>
+        <h2 id="world-title">Mundo</h2>
+        <span class="spacer"></span>
+      </header>
+      <div class="panel world-hub">
+        <div class="world-banner" id="world-banner"></div>
+        <p class="world-story" id="world-story"></p>
+        <div class="lesson-list" id="lesson-list"></div>
+        <button class="btn btn-primary btn-block" id="btn-start-challenge" disabled>
+          Completa las lecciones para el reto
+        </button>
+      </div>
+    </section>
+
+    <!-- LESSON -->
+    <section id="screen-lesson" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" id="btn-lesson-back" aria-label="Volver">←</button>
+        <h2 id="lesson-title">Lección</h2>
+        <span class="spacer"></span>
+      </header>
+      <div class="panel lesson-panel">
+        <div class="lesson-visual" id="lesson-visual"></div>
+        <div class="lesson-body" id="lesson-body"></div>
+        <button class="btn btn-primary btn-block" id="btn-lesson-done">¡Entendido! ✓</button>
+      </div>
+    </section>
+
+    <!-- CHALLENGE -->
+    <section id="screen-challenge" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="world" aria-label="Volver">←</button>
+        <h2 id="challenge-title">Reto</h2>
+        <span class="pill" id="challenge-progress">0/0</span>
+      </header>
+      <div class="panel challenge-panel">
+        <p class="challenge-prompt" id="challenge-prompt"></p>
+        <div id="challenge-area"></div>
+        <p class="feedback" id="challenge-feedback" hidden></p>
+        <button class="btn btn-primary btn-block" id="btn-challenge-check" hidden>Comprobar</button>
+        <button class="btn btn-primary btn-block" id="btn-challenge-next" hidden>Siguiente →</button>
+      </div>
+    </section>
+
+    <!-- REWARD -->
+    <section id="screen-reward" class="screen">
+      <div class="reward-wrap">
+        <p class="reward-flash">¡RETO SUPERADO!</p>
+        <div class="reward-piece" id="reward-piece"></div>
+        <h2 id="reward-name">Pieza</h2>
+        <p id="reward-desc"></p>
+        <div class="stars-row" id="reward-stars"></div>
+        <button class="btn btn-primary" data-go="map">Volver al mapa</button>
+        <button class="btn btn-ghost" data-go="workshop">Ver en el taller</button>
+      </div>
+    </section>
+
+    <!-- WORKSHOP -->
+    <section id="screen-workshop" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="map" aria-label="Mapa">←</button>
+        <h2>Taller de armado</h2>
+        <span class="spacer"></span>
+      </header>
+      <div class="panel">
+        <p class="workshop-intro">Arrastra o toca las piezas desbloqueadas para armar tu SumoBot.</p>
+        <div class="build-stage">
+          <div class="sumobot-frame" id="sumobot-frame">
+            <div class="slot" data-part="plan" title="Plan"><span>?</span></div>
+            <div class="slot" data-part="arduino" title="Arduino"><span>?</span></div>
+            <div class="slot" data-part="wemos" title="Wemos"><span>?</span></div>
+            <div class="slot" data-part="blocks" title="Bloques"><span>?</span></div>
+            <div class="slot" data-part="code" title="Código"><span>?</span></div>
+            <div class="slot" data-part="chassis" title="Chasis"><span>?</span></div>
+            <div class="slot" data-part="print" title="Impresión"><span>?</span></div>
+          </div>
+        </div>
+        <div class="inventory" id="inventory"></div>
+        <button class="btn btn-primary btn-block" id="btn-finish-bot" disabled>
+          Completa las 7 piezas para el combate final
+        </button>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-go="map">🗺️ Mapa</button>
+        <button class="nav-btn active" data-go="workshop">🛠️ Taller</button>
+        <button class="nav-btn" data-go="rubric">📋 Rúbrica</button>
+      </nav>
+    </section>
+
+    <!-- RUBRIC / PITCH -->
+    <section id="screen-rubric" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="map" aria-label="Mapa">←</button>
+        <h2>Rúbrica del proyecto</h2>
+        <span class="spacer"></span>
+      </header>
+      <div class="panel">
+        <p class="rubric-intro">Así te evalúan en la feria. Usa esto para preparar tu pitch de 3 minutos.</p>
+        <div id="rubric-list" class="rubric-list"></div>
+        <div class="pitch-box">
+          <h3>🎤 Tu pitch de 3 minutos</h3>
+          <ol>
+            <li><b>Problema:</b> ¿Qué situación resuelve tu SumoBot?</li>
+            <li><b>Solución:</b> ¿Cómo lo armaste paso a paso?</li>
+            <li><b>Tecnología:</b> Arduino/Wemos, código y piezas 3D.</li>
+            <li><b>Impacto:</b> ¿Qué aprendiste y por qué sirve en tu comunidad?</li>
+          </ol>
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-go="map">🗺️ Mapa</button>
+        <button class="nav-btn" data-go="workshop">🛠️ Taller</button>
+        <button class="nav-btn active" data-go="rubric">📋 Rúbrica</button>
+      </nav>
+    </section>
+
+    <!-- ARENA FINAL -->
+    <section id="screen-arena" class="screen">
+      <header class="topbar">
+        <button class="btn-icon" data-go="workshop" aria-label="Volver">←</button>
+        <h2>Arena SumoBot</h2>
+        <span class="spacer"></span>
+      </header>
+      <div class="panel arena-panel">
+        <div class="arena-ring" id="arena-ring">
+          <div class="fighter you" id="fighter-you">🤖</div>
+          <div class="fighter rival" id="fighter-rival">👾</div>
+        </div>
+        <p id="arena-msg">¡Tu SumoBot está listo! Toca COMBATIR.</p>
+        <button class="btn btn-primary btn-block" id="btn-fight">⚔️ COMBATIR</button>
+        <button class="btn btn-ghost btn-block" id="btn-diploma" hidden data-go="diploma">Ver diploma</button>
+      </div>
+    </section>
+
+    <!-- DIPLOMA -->
+    <section id="screen-diploma" class="screen">
+      <div class="diploma">
+        <p class="eyebrow">SumoBot Academy</p>
+        <h2>¡Inventor/a certificado/a!</h2>
+        <p class="diploma-name" id="diploma-name">—</p>
+        <p>Completó el aprendizaje por retos para armar un SumoBot: electrónica, programación, diseño e impresión 3D.</p>
+        <div class="diploma-stars" id="diploma-stars"></div>
+        <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar</button>
+        <button class="btn btn-ghost" data-go="map">Volver al mapa</button>
+        <button class="btn btn-ghost" id="btn-reset">Nueva partida</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
