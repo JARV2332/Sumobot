@@ -136,6 +136,48 @@ body {
   padding: 6px 10px; font-weight: 800; font-size: 0.82rem;
 }
 
+.home-qr {
+  margin: 22px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--panel);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 14px;
+  max-width: 420px;
+  text-align: left;
+}
+.qr-link { display: block; flex-shrink: 0; }
+.qr-img {
+  width: 140px; height: 140px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  background: #fff;
+  image-rendering: pixelated;
+}
+.qr-text { flex: 1; min-width: 160px; }
+.qr-title {
+  font-family: var(--font-display);
+  font-size: 10px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+.qr-desc {
+  margin: 0 0 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.qr-url {
+  font-weight: 900;
+  color: var(--teal-dark);
+  word-break: break-all;
+  font-size: 0.85rem;
+}
+
 .eyebrow {
   font-family: var(--font-display);
   font-size: 9px;

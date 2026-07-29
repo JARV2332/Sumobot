@@ -5,7 +5,8 @@ const ASSETS = [
   "./css/styles.css",
   "./js/data.js",
   "./js/game.js",
-  "./manifest.json"
+  "./manifest.json",
+  "./assets/qr-sumobot.png"
 ];
 
 self.addEventListener("install", (event) => {
